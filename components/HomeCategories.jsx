@@ -57,7 +57,7 @@ export default function HomeCategories() {
           <Link 
             key={cat.label + '-' + idx} 
             href={cat.link}
-            className="flex flex-col items-center min-w-[calc(100vw/5-16px)] md:flex-1 cursor-pointer hover:bg-blue-50 hover:scale-105 transition-all duration-200 rounded-2xl p-3 -m-3"
+            className="flex flex-col items-center min-w-[calc(100vw/5-16px)] md:min-w-0 md:w-1/10 cursor-pointer hover:bg-blue-50 hover:scale-105 transition-all duration-200 rounded-2xl p-3 -m-3"
           >
             <div className="relative">
               <Image src={cat.img} alt={cat.label} width={70} height={70} className="object-contain" />

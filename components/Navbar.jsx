@@ -554,17 +554,32 @@ const Navbar = () => {
 
           {/* Mobile Right Side - Login Icon + Cart */}
           <div className="lg:hidden flex items-center gap-3">
-            {/* Login Icon - Show for Guest Users on Home Page */}
-            {isHomePage && !firebaseUser && (
-              <button
-                onClick={() => setSignInOpen(true)}
-                className="p-2 hover:bg-white/20 rounded-full transition"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-              </button>
+            {/* Show user avatar if signed in, else login icon */}
+            {isHomePage && (
+              firebaseUser ? (
+                <button
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="p-2 hover:bg-white/20 rounded-full transition"
+                >
+                  {firebaseUser.photoURL ? (
+                    <Image src={firebaseUser.photoURL} alt="User" width={28} height={28} className="rounded-full object-cover" />
+                  ) : (
+                    <span className="w-7 h-7 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold text-base">
+                      {firebaseUser.displayName?.[0]?.toUpperCase() || firebaseUser.email?.[0]?.toUpperCase() || 'U'}
+                    </span>
+                  )}
+                </button>
+              ) : (
+                <button
+                  onClick={() => setSignInOpen(true)}
+                  className="p-2 hover:bg-white/20 rounded-full transition"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </button>
+              )
             )}
             
             <button onClick={handleCartClick} className="relative p-2">
@@ -623,6 +638,13 @@ const Navbar = () => {
                 </button>
               ) : (
                 <div className="w-full px-4 py-3 bg-blue-50 text-blue-700 text-sm font-semibold rounded-full mb-4 flex items-center gap-2">
+                  {firebaseUser.photoURL ? (
+                    <Image src={firebaseUser.photoURL} alt="User" width={28} height={28} className="rounded-full object-cover" />
+                  ) : (
+                    <span className="w-7 h-7 flex items-center justify-center rounded-full bg-blue-600 text-white font-bold text-base">
+                      {firebaseUser.displayName?.[0]?.toUpperCase() || firebaseUser.email?.[0]?.toUpperCase() || 'U'}
+                    </span>
+                  )}
                   <span className="font-medium">Hi, {firebaseUser.displayName || firebaseUser.email}</span>
                 </div>
               )}
@@ -653,6 +675,17 @@ const Navbar = () => {
                     >
                       <span>Browse History</span>
                     </Link>
+                    <button
+                      className="w-full text-left px-4 py-3 bg-red-50 hover:bg-red-100 rounded-lg transition text-red-600 font-medium mt-2"
+                      onClick={async () => {
+                        await auth.signOut();
+                        setMobileMenuOpen(false);
+                        toast.success('Signed out successfully');
+                        window.location.reload();
+                      }}
+                    >
+                      Sign Out
+                    </button>
                     <div className="px-4"><div className="h-px bg-gray-200 my-2" /></div>
                   </>
                 )}
@@ -780,6 +813,19 @@ const Navbar = () => {
                 >
                   Return Policy
                 </Link>
+                {firebaseUser && (
+                  <button
+                    className="w-full text-left px-4 py-3 bg-red-50 hover:bg-red-100 rounded-lg transition text-red-600 font-medium mt-4"
+                    onClick={async () => {
+                      await auth.signOut();
+                      setMobileMenuOpen(false);
+                      toast.success('Signed out successfully');
+                      window.location.reload();
+                    }}
+                  >
+                    Sign Out
+                  </button>
+                )}
               </div>
             </div>
           </div>

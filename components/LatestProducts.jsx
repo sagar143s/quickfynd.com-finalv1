@@ -69,7 +69,7 @@ const ProductCard = ({ product }) => {
       {/* Image Container */}
       <div className="relative w-full h-32 sm:h-56 overflow-hidden bg-gray-50">
         {product.fastDelivery && (
-          <span className="absolute top-2 left-2 bg-orange-500 text-white text-[8px] font-bold px-1 py-0.5 rounded-full shadow-md z-10">
+          <span className="absolute top-2 left-2 bg-orange-500 text-white text-[10px] sm:text-[8px] lg:text-[12px] font-bold px-1.5 py-1 sm:px-1 sm:py-0.5 lg:px-2 lg:py-1.5 rounded-full shadow-md z-10">
             Fast Delivery
           </span>
         )}
@@ -102,7 +102,7 @@ const ProductCard = ({ product }) => {
         )}
         
         {discount > 0 && (
-          <span className={`absolute top-2 right-2 ${discount >= 50 ? 'bg-green-500' : 'bg-orange-500'} text-white text-[8px] font-bold px-1 py-0.5 rounded-full shadow-md z-10`}>
+          <span className={`absolute top-2 right-2 ${discount >= 50 ? 'bg-green-500' : 'bg-orange-500'} text-white text-[10px] sm:text-[8px] lg:text-[12px] font-bold px-1.5 py-1 sm:px-1 sm:py-0.5 lg:px-2 lg:py-1.5 rounded-full shadow-md z-10`}>
             {discount}% OFF
           </span>
         )}
@@ -191,7 +191,7 @@ const BestSelling = () => {
         visibleButton={false}
       />
 
-      <div className="mt-6 grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
+      <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-4">
         {isLoading
           ? Array(displayQuantity).fill(0).map((_, idx) => (
               <div key={idx} className="bg-white rounded-xl shadow-sm animate-pulse">

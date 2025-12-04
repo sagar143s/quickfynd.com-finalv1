@@ -67,19 +67,13 @@ const SignInModal = ({ open, onClose }) => {
 
   const handleSendOTP = async () => {
     setError('');
-    // Accept phoneNumber as either '+<country_code><number>' or '<country_code> <number>'
-    let formattedPhone = phoneNumber.trim();
-    // If user enters '91 9876543210', convert to '+919876543210'
-    if (/^\d{1,3} \d{6,}$/.test(formattedPhone)) {
-      const [code, number] = formattedPhone.split(' ');
-      formattedPhone = `+${code}${number}`;
-    }
-    // If user enters '9876543210', add default country code
-    if (/^\d{6,}$/.test(formattedPhone)) {
-      formattedPhone = `+91${formattedPhone}`;
-    }
+    // Assume you have a state for selectedCountryCode, e.g. '+91'
+    // If not, default to '+91'
+    const countryCode = selectedCountryCode || '+91';
+    const number = phoneNumber.replace(/\D/g, ''); // Remove non-digits
+    const formattedPhone = `${countryCode}${number}`;
     if (!/^\+\d{10,}$/.test(formattedPhone)) {
-      setError('Please enter a valid phone number with country code');
+      setError('Please enter a valid phone number. Example: 7592875212');
       return;
     }
     setLoading(true);
