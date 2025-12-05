@@ -114,6 +114,7 @@ export default function SmoothBrands({ data = brands }) {
                   className="object-contain w-full h-full"
                   width={200}
                   height={220}
+                  style={{ width: 'auto', height: 'auto' }}
                   priority={idx < 5}
                   draggable={false}
                 />

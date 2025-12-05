@@ -313,6 +313,7 @@ const ProductDetails = ({ product }) => {
                     src={mainImage || 'https://ik.imagekit.io/jrstupuke/placeholder.png'}
                     alt={product.name}
                     fill
+                    sizes="100vw"
                     className="object-cover"
                     priority
                     onError={(e) => { e.currentTarget.src = 'https://ik.imagekit.io/jrstupuke/placeholder.png'; }}

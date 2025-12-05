@@ -1,4 +1,6 @@
-'use client';
+
+
+"use client";
 
 import { PackageIcon, Search, ShoppingCart, LifeBuoy, Menu, X, HeartIcon, StarIcon, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -16,7 +18,30 @@ import Truck from '../assets/delivery.png';
 import SignInModal from './SignInModal';
 
 const Navbar = () => {
-  // (already declared above)
+  // State for image search modal
+  const [showImageSearch, setShowImageSearch] = useState(false);
+
+  // Helper function for image search
+  const handleImageSearch = async (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      const res = await fetch('/api/search-by-image', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      let keyword = data.keyword || (Array.isArray(data.keywords) ? data.keywords[0] : '');
+      if (keyword) {
+        window.location.href = `/shop?search=${encodeURIComponent(keyword)}`;
+      } else {
+        alert('No matching product found.');
+      }
+    } catch (err) {
+      alert('Image search failed.');
+    }
+  };
+
   // State for categories
   const [categories, setCategories] = useState([]);
   // State for animated search placeholder
@@ -279,7 +304,7 @@ const Navbar = () => {
       )}
 
       {/* Original Full Navbar (Hidden on mobile for non-home pages) */}
-      <nav className={`relative z-50 shadow-sm ${!isHomePage ? 'hidden lg:block' : ''}`} style={{ backgroundColor: '#2874f0;', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
+      <nav className={`relative z-50 shadow-sm ${!isHomePage ? 'hidden lg:block' : ''}`} style={{ backgroundColor: '#2874f0', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between py-3 transition-all">
 
@@ -420,7 +445,63 @@ const Navbar = () => {
                 className="w-full bg-transparent outline-none placeholder-gray-500 text-gray-700"
                 required
               />
+              {/* Camera Icon for image search (temporarily hidden)
+              <button type="button" className="flex-shrink-0" onClick={() => setShowImageSearch(true)}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-500 hover:text-blue-600">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5V7.5A2.25 2.25 0 015.25 5.25h2.086a2.25 2.25 0 001.591-.659l.828-.828A2.25 2.25 0 0111.75 3h.5a2.25 2.25 0 011.595.663l.828.828a2.25 2.25 0 001.591.659h2.086A2.25 2.25 0 0121 7.5v9a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 16.5z" />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>
+              </button>
+              */}
             </form>
+            {/* Image Search Modal (Desktop only) */}
+            {typeof window !== 'undefined' && window.innerWidth >= 768 && showImageSearch && (
+              <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                <div className="bg-white rounded-xl shadow-2xl max-w-sm w-full p-6 relative animate-slideUp">
+                  <button
+                    onClick={() => setShowImageSearch(false)}
+                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                  <h2 className="text-lg font-bold mb-2">Search by image</h2>
+                  <p className="text-sm text-gray-500 mb-4">Find what you love with better prices by using an image search.</p>
+                  <div
+                    className="border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center py-8 px-4 mb-4 cursor-pointer"
+                    onDrop={async (e) => {
+                      e.preventDefault();
+                      const file = e.dataTransfer.files[0];
+                      if (file) await handleImageSearch(file);
+                    }}
+                    onDragOver={e => e.preventDefault()}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-gray-400 mb-2">
+                      <rect x="4" y="4" width="16" height="16" rx="2" fill="#f3f4f6" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 16l4-4 4 4" />
+                      <circle cx="9" cy="9" r="2" />
+                    </svg>
+                    <span className="text-gray-500 mb-2">Drag an image here</span>
+                    <span className="text-gray-400 text-xs mb-2">or</span>
+                    <label htmlFor="image-search-upload-modal" className="inline-block">
+                      <input
+                        id="image-search-upload-modal"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={async (e) => {
+                          const file = e.target.files[0];
+                          if (file) await handleImageSearch(file);
+                        }}
+                      />
+                      <span className="bg-red-600 text-white px-6 py-2 rounded-full font-bold cursor-pointer">Upload a photo</span>
+                    </label>
+                    <span className="text-gray-400 text-xs mt-2">*For a quick search hit CTRL+V to paste an image into the search box</span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Side - Actions */}

@@ -9,7 +9,7 @@ import Link from 'next/link'
 import Mainslider1 from '../assets/herobanner/Banner A 3.webp'
 import Mainslider2 from '../assets/herobanner/Banner A 2.webp'
 import MainSlider3 from '../assets/herobanner/Banner A 1.webp'
-import SubBanner1 from '../assets/herobanner/Banner B 1.webp'
+import SubBanner1 from '../assets/herobanner/BannerB3.webp'
 import SubBanner2 from '../assets/herobanner/Banner B 2.webp'
 
 /* ---------------------------------------------------

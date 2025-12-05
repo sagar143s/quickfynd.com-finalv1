@@ -323,23 +323,28 @@ export async function POST(request) {
                     customerName = user?.name || '';
                 }
 
-                // Send order confirmation email directly
+                // Send order confirmation email to customer using Nodemailer
                 if (customerEmail) {
-                    await sendOrderConfirmationEmail({
-                        email: customerEmail,
-                        name: customerName,
-                        orderId: order._id,
-                        total: order.total,
-                        orderItems: populatedOrder.orderItems,
-                        shippingAddress: order.shippingAddress,
-                        createdAt: order.createdAt
+                    const { sendOrderEmail } = await import('@/lib/nodemailer');
+                    await sendOrderEmail({
+                        to: customerEmail,
+                        subject: 'Order Confirmation',
+                        html: `<p>Dear ${customerName},</p><p>Your order has been received and is being processed.</p><p>Thank you for shopping with us!</p>`
                     });
-                    console.log('Order confirmation email sent to:', customerEmail);
+                    console.log('Nodemailer order confirmation sent to customer:', customerEmail);
                 }
-
-
+                // Send order notification to admin using Nodemailer
+                if (process.env.ADMIN_EMAIL) {
+                    const { sendOrderEmail } = await import('@/lib/nodemailer');
+                    await sendOrderEmail({
+                        to: process.env.ADMIN_EMAIL,
+                        subject: 'New Order Received',
+                        html: `<p>New order placed by ${customerName} (${customerEmail}).</p>`
+                    });
+                    console.log('Nodemailer order notification sent to admin:', process.env.ADMIN_EMAIL);
+                }
             } catch (emailError) {
-                console.error('Error sending order confirmation email:', emailError);
+                console.error('Error sending EmailJS auto-reply:', emailError);
                 // Don't fail the order if email fails
             }
         }

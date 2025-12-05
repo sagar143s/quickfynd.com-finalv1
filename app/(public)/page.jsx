@@ -37,7 +37,6 @@ export default function Home() {
                 setSection4Data(section4Res.data.sections || []);
             } catch (error) {
                 console.error('Error fetching data:', error);
-                // Set empty arrays as fallback
                 setAdminSections([]);
                 setGridSections([]);
                 setSection4Data([]);
@@ -46,10 +45,8 @@ export default function Home() {
         fetchData();
     }, []);
 
-    // Create sections from admin data
     const curatedSections = useMemo(() => {
         return adminSections.map(section => {
-            // Get products by IDs if specified
             let sectionProducts = section.productIds?.length > 0
                 ? products.filter(p => section.productIds.includes(p.id))
                 : products;
