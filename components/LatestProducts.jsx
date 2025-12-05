@@ -48,7 +48,7 @@ const ProductCard = ({ product }) => {
   const reviewCount = product.ratingCount || 0
 
   const productName = (product.name || product.title || 'Untitled Product').length > 30
-    ? (product.name || product.title || 'Untitled Product').slice(0, 30) + '...'
+    ? (product.name || product.title || 'Untitled Product').slice(0, 23) + '...'
     : (product.name || product.title || 'Untitled Product')
 
   const handleAddToCart = (e) => {
@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
       onMouseLeave={hasSecondary ? () => setHovered(false) : null}
     >
       {/* Image Container */}
-      <div className="relative w-full h-32 sm:h-56 overflow-hidden bg-gray-50">
+      <div className="relative w-full h-32 sm:h-56 overflow-hidden bg-gray-50 aspect-square sm:aspect-auto">
         {product.fastDelivery && (
           <span className="absolute top-2 left-2 bg-orange-500 text-white text-[10px] sm:text-[8px] lg:text-[12px] font-bold px-1.5 py-1 sm:px-1 sm:py-0.5 lg:px-2 lg:py-1.5 rounded-full shadow-md z-10">
             Fast Delivery
@@ -114,7 +114,7 @@ const ProductCard = ({ product }) => {
           {productName}
         </h3>
         
-        <div className="flex items-center mb-2">
+        <div className="flex items-center mb-0">
           {reviewCount > 0 ? (
             <>
               {[...Array(5)].map((_, i) => (
@@ -124,10 +124,10 @@ const ProductCard = ({ product }) => {
                   className={i < ratingValue ? 'text-yellow-400' : 'text-gray-300'}
                 />
               ))}
-              <span className="text-gray-500 text-[5px] sm:text-xs ml-1">({reviewCount})</span>
+              <span className="text-gray-500 text-[8px] sm:text-xs ml-1">({reviewCount})</span>
             </>
           ) : (
-            <span className="text-[5px] sm:text-xs text-gray-400">No reviews yet</span>
+            <span className="text-[10px] sm:text-xs text-gray-400">No reviews yet</span>
           )}
         </div>
 
